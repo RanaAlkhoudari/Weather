@@ -1,6 +1,6 @@
 # Weather
 
-The project enables the user to get information about the weather in any city.
+The project enables the user to get information about the weather.
 
 The project fetchs the data from openweathermap api.
 
