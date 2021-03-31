@@ -19,4 +19,4 @@ The app needs some user interaction such that you need to grab different data fr
 
 The app needs to interact with another endpoint from the same API to grab data.
 
-The app needs to interact with other API to grab data.
+The app needs to interact with another API to grab data.
