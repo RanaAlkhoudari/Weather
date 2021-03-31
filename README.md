@@ -6,21 +6,22 @@ The project fetchs the data from openweathermap api.
 
 # must have
 
-The app needs to be a single page application.
 
 The user can select a city and click on search button to have information about the weather.
 
-The app needs to interact with openweathermap api to grab data like temperature, country name, time, humidity, wind etc.
+The user is capable to get information like temperature, country name, humidity, wind etc.
 
-The app needs to have an error handling when the user types a wrong city name and shows it to the user.
+The user is capable to know the time of the choosen city (if he/she wants by clicking on a button to display the time)
+
+The user is capable to get an error message when inserting a wrong city name.
 
  
 # nice to have
 
-The app enables the user to get information about air pollution for the city he chooses.
+The user is capable to get information about air pollution for the choosen city.
 
-The app enables the user to get information about the weather hourly or every few hours.
+The user is capable to get information about the weather hourly or every few hours.
 
-The app enables the user to choose the unit of the temperature Fahrenheit, Celsius and Kelvin.
+The user is capable to choose the unit of the temperature Fahrenheit, Celsius and Kelvin.
 
 The app shows icons or images from another api.
