@@ -6,17 +6,21 @@ The project fetchs the data from openweathermap api.
 
 # must have
 
-The app needs to be a single page application. That means only one index.html file and JavaScript needs to update the html using DOM manipulation.
+The app needs to be a single page application.
 
-The app needs to interact with an API to grab data.
+The user can select a city and click on search button to have information about the weather.
 
-The app needs to have loading/error handling for the interaction with the API.
+The app needs to interact with openweathermap api to grab data like temperature, country name, time, humidity, wind etc.
 
-The app needs some user interaction such that you need to grab different data from the API. So you cannot just grab everything from the API and store it locally.
+The app needs to have an error handling when the user types a wrong city name and shows it to the user.
 
-
+ 
 # nice to have
 
-The app needs to interact with another endpoint from the same API to grab data.
+The app enables the user to get information about air pollution for the city he chooses.
 
-The app needs to interact with another API to grab data.
+The app enables the user to get information about the weather hourly or every few hours.
+
+The app enables the user to choose the unit of the temperature Fahrenheit, Celsius and Kelvin.
+
+The app shows icons or images from another api.
