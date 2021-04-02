@@ -1,0 +1,77 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: rgb(187, 223, 245);
+    font-family: 'Righteous', cursive;
+    color: white;
+    background-image: url("https://cdn.britannica.com/74/182174-050-6755AB49/balloon-sky.jpg");
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.title{
+    font-size: 40px;
+    text-align: center;
+    margin-top: 200px;
+}
+
+.search{
+    width: 500px;
+    height: 40px;
+    padding: 10px;
+    font-family: 'Righteous', cursive;
+    font-size: 20px;
+    text-align: center;
+    color: grey;
+}
+
+
+button{
+    width: 100px;
+    height: 40px;
+    font-size: 15px;
+    color: white;
+    background-color: rgb(64, 112, 224);
+    margin: 10px 50px;
+    border: 1px transparent solid;
+    box-shadow: 5px 5px 9px rgb(208, 213, 219);
+    border-radius: 30px;
+    cursor: pointer;
+    Outline: none;
+}
+
+.center{
+    margin: 50px auto;
+    font-size: 25px;
+    text-align: center;
+    padding: 10px;
+    border: 1px transparent solid;
+    border-radius: 20px;
+    width: 400px;
+    background-color: rgb(84, 127, 230);
+    opacity: .8;
+    box-shadow: 5px 5px 9px rgb(208, 213, 219);
+    border-radius: 0 10% 0 10%;
+}
+
+span, .info, #feels-like{
+    padding: 10px;
+    font-size: 18px;
+}
+
+.hide{
+    display: none;
+}
+
+input{
+    display: inline;
+}
