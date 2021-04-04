@@ -3,101 +3,73 @@ import { changeTempC } from "./components/changeTempC.js";
 import { changeTempF } from "./components/changeTempF.js";
 import { changeWindSpeed } from "./components/changeWindSpeed.js";
 import { dateBuilder } from "./components/dateBuilder.js";
+import { showWeather } from "./helpers/showing.js";
+import { handlePollution } from "./handlers/pollution-handler.js";
+import { handleWeather } from "./handlers/weather-handler.js";
+import { handleCovid } from "./handlers/covid-handler.js";
 
-const weatherContainer = document.getElementById("weather");
-const pollutionContainer = document.getElementById("pollution");
-const fahrenheitBtn = document.getElementById("fahrenheit");
-const pollutionBtn = document.getElementById("pollution-btn");
-const input = document.querySelector("input");
+const data = {
+  weatherData: null,
+  pollutionData: null,
+  coronaData: null,
+};
 
-input.addEventListener("search", () => {
-  if (input.value.length != 0) {
-    getWeather(input.value);
-  }
-});
-
-async function getWeather(city) {
-  const url = `http://api.openweathermap.org/data/2.5/weather`;
-
-  try {
-    const res = await fetch(
-      `${url}?q=${city}&APPID=73506690695f236e1305cf5f9aa6fc38`
-    );
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    const dataJson = await res.json();
-
-    pollutionBtn.addEventListener("click", () => {
-      if (pollutionBtn.textContent === "Pollution") {
-        pollutionBtn.textContent = `Weather`;
-        pollutionContainer.classList.remove("hide");
-        weatherContainer.classList.add("hide");
-        
-        getPollution(dataJson);
-      } else {
-        pollutionBtn.textContent = "Pollution";
-        weatherContainer.classList.remove("hide");
-        pollutionContainer.classList.add("hide");
-      }
-    });
-    displayWeather(dataJson);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-function displayWeather(dataJson) {
-  const { main, weather, sys, dt, wind } = dataJson;
+export function displayWeather() {
+  const { main, weather, sys, dt, wind, name } = data.weatherData;
   const { temp, feels_like, temp_min, temp_max, humidity } = main;
   const [state] = weather;
   const { sunrise, sunset } = sys;
 
-  const tempCelsius = changeTempC(temp);
-  const feelsLikeCelsius = changeTempC(feels_like);
-  const tempMinCelsius = changeTempC(temp_min);
-  const tempMaxCelsius = changeTempC(temp_max);
+  data.tempCelsius = changeTempC(temp);
+  data.feelsLikeCelsius = changeTempC(feels_like);
+  data.tempMinCelsius = changeTempC(temp_min);
+  data.tempMaxCelsius = changeTempC(temp_max);
   const sunRise = changeTime(sunrise);
   const sunSet = changeTime(sunset);
   const currentTime = changeTime(dt);
   const windSpeed = changeWindSpeed(wind.speed);
   const now = new Date();
-
+  const weatherContainer = document.getElementById("weather");
   weatherContainer.classList.add("center");
-  weatherContainer.innerHTML = `<p>${dataJson.name} ${sys.country}</p>
-                  <p>${dateBuilder(now)}</p>
-                    <p id="temp">${tempCelsius} °C</p>
-                    <p> ${state.main}</p>
-                    <p>Time: ${currentTime}</p>
-                    <img src = http://openweathermap.org/img/wn/${
-                      state.icon
-                    }@2x.png>
-                    <p class="info">Humidity: ${humidity} %</p>
-                    <p><span id="high">H: ${tempMaxCelsius} °C</span><span id="low">L: ${tempMinCelsius} °C </span></p>
-                    <p id="feels-like">Feels like: ${feelsLikeCelsius} °C</p>
-                    <p><span>sunrise: ${sunRise}</span><span>sunset: ${sunSet}</span></p>
-                    <p class="info">Wind: ${windSpeed} km/h</p>`;
+  weatherContainer.innerHTML = ` <button id="fahrenheit-btn">Fahrenheit</button>
+                              <p>${name} ${sys.country}</p>
+    <p>${dateBuilder(now)}</p>
+      <p id="temp">${data.tempCelsius} °C</p>
+      
+      <p> ${state.main}</p>
+      <p>Time: ${currentTime}</p>
+      <img src = http://openweathermap.org/img/wn/${state.icon}@2x.png>
+      <p class="info">Humidity: ${humidity} %</p>
+      <p><span id="high">H: ${data.tempMaxCelsius} °C</span><span id="low">L: ${
+    data.tempMinCelsius
+  } °C </span></p>
+      <p id="feels-like">Feels like: ${data.feelsLikeCelsius} °C</p>
+      <p><span>sunrise: ${sunRise}</span><span>sunset: ${sunSet}</span></p>
+      <p class="info">Wind: ${windSpeed} km/h</p>`;
 
-  pollutionBtn.classList.remove("hide");
-  fahrenheitBtn.classList.remove("hide");
+  const fahrenheitBtn = document.getElementById("fahrenheit-btn");
+  fahrenheitBtn.classList.add("fahrenheit-btn");
   fahrenheitBtn.addEventListener("click", () => {
     if (fahrenheitBtn.textContent === "Fahrenheit") {
-      getTempFahrenheit(dataJson);
+      fahrenheitBtn.textContent = "Celsius";
+      getTempFahrenheit();
     } else {
-      document.getElementById("temp").innerHTML = `${tempCelsius} °C`;
-      document.getElementById("high").innerHTML = `H: ${tempMaxCelsius} °C`;
-      document.getElementById("low").innerHTML = `L: ${tempMinCelsius} °C`;
+      fahrenheitBtn.textContent = "Fahrenheit";
+      document.getElementById("temp").innerHTML = `${data.tempCelsius} °C`;
+      document.getElementById(
+        "high"
+      ).innerHTML = `H: ${data.tempMaxCelsius} °C`;
+      document.getElementById("low").innerHTML = `L: ${data.tempMinCelsius} °C`;
       document.getElementById(
         "feels-like"
-      ).innerHTML = `Feels like: ${feelsLikeCelsius} °C`;
-      fahrenheitBtn.innerText = "Fahrenheit";
+      ).innerHTML = `Feels like: ${data.feelsLikeCelsius} °C`;
     }
   });
+  document.getElementById("container-btn").classList.remove("hide");
 }
 
-function getTempFahrenheit(dataJson) {
-  fahrenheitBtn.innerText = "Celsius";
-  const { main } = dataJson;
+function getTempFahrenheit() {
+  const { main } = data.weatherData;
   const { temp, feels_like, temp_min, temp_max } = main;
   const tempFahrenheit = changeTempF(temp);
   const feelsLikeFahrenheit = changeTempF(feels_like);
@@ -111,57 +83,86 @@ function getTempFahrenheit(dataJson) {
   ).innerHTML = `Feels like: ${feelsLikeFahrenheit} °F`;
 }
 
-async function getPollution(dataJson) {
-  try {
-    const url = `http://api.openweathermap.org/data/2.5/air_pollution`;
-    const { coord } = dataJson;
-    const res = await fetch(
-      `${url}?lat=${coord.lat}&lon=${coord.lon}&appid=73506690695f236e1305cf5f9aa6fc38`
-    );
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-    const data = await res.json();
-    const { list } = data;
-    const [result] = list;
-    const aqi = result.main.aqi;
-    pollutionContainer.classList.add("center");
+export function displayPollution() {
+  const pollutionContainer = document.getElementById("pollution");
+  const { list } = data.pollutionData;
+  const [result] = list;
+  const aqi = result.main.aqi;
+  pollutionContainer.classList.add("center");
 
-    switch (aqi) {
-      case 1:
-        pollutionContainer.innerHTML = `Aqi: ${aqi} Good`;
-        pollutionContainer.style.color = "green";
-        break;
-      case 2:
-        pollutionContainer.innerHTML = `Aqi: ${aqi} Fair`;
-        pollutionContainer.style.color = "yellow";
-        break;
-      case 3:
-        pollutionContainer.innerHTML = `Aqi: ${aqi} Moderate`;
-        pollutionContainer.style.color = "orange";
-        break;
-      case 4:
-        pollutionContainer.innerHTML = `Aqi: ${aqi} Poor`;
-        pollutionContainer.style.color = "red";
-        break;
-      //case 5:
-      default:
-        pollutionContainer.innerHTML = `Aqi: ${aqi} Very Poor`;
-        pollutionContainer.style.color = "purple";
-
-      //text = "No value found";
-    }
-
-    for (const [key, value] of Object.entries(result.components)) {
-      const p = document.createElement("p");
-      p.style.padding = "10px";
-      p.innerHTML = `${key}: ${value}`;
-      pollutionContainer.appendChild(p);
-    }
-    
-  } catch (error) {
-    console.log(error);
+  switch (aqi) {
+    case 1:
+      pollutionContainer.textContent = `Aqi: ${aqi} Good`;
+      pollutionContainer.style.color = "green";
+      break;
+    case 2:
+      pollutionContainer.textContent = `Aqi: ${aqi} Fair`;
+      pollutionContainer.style.color = "yellow";
+      break;
+    case 3:
+      pollutionContainer.textContent = `Aqi: ${aqi} Moderate`;
+      pollutionContainer.style.color = "orange";
+      break;
+    case 4:
+      pollutionContainer.textContent = `Aqi: ${aqi} Poor`;
+      pollutionContainer.style.color = "red";
+      break;
+    default:
+      pollutionContainer.textContent = `Aqi: ${aqi} Very Poor`;
+      pollutionContainer.style.color = "purple";
+  }
+  for (const [key, value] of Object.entries(result.components)) {
+    const p = document.createElement("p");
+    p.style.padding = "10px";
+    p.textContent = `${key}: ${value}`;
+    pollutionContainer.appendChild(p);
   }
 }
 
+export function displayCovid() {
+  const coronaContainer = document.getElementById("corona");
+  const { All } = data.coronaData;
+  const {
+    country,
+    confirmed,
+    deaths,
+    location,
+    population,
+    recovered,
+    capital_city,
+  } = All;
+  coronaContainer.classList.add("center");
+  coronaContainer.innerHTML = `<p class="corona"><span>Showing information for: </span> <br>${country}</p>
+                                <p class="corona">Capital-city: ${capital_city}</p>
+                                 <p class="corona">Population: ${population}</p>
+                                 <p class="corona">Location: ${location}</p>
+                                 <p class="corona">Confirmed: ${confirmed}</p>
+                                 <p class="corona">Deaths: ${deaths}</p>
+                                 <p class="corona">Recovered: ${recovered}`;
+}
 
+function main() {
+  const input = document.querySelector("input");
+  input.addEventListener("search", () => {
+    if (input.value.length != 0) {
+      handleWeather(input.value, data);
+      showWeather();
+    }
+  });
+
+  document.getElementById("weather-btn").addEventListener("click", () => {
+    displayWeather();
+    showWeather();
+  });
+
+  document
+    .getElementById("pollution-btn")
+    .addEventListener("click", () => handlePollution(data));
+  const coronaBtn = document.getElementById("corona-btn");
+  if (!("DisplayNames" in Intl)) {
+    coronaBtn.classList.add("hide");
+  }
+  coronaBtn.addEventListener("click", () => handleCovid(data));
+}
+
+window.addEventListener("load", main);
