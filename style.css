@@ -9,6 +9,7 @@ body {
   font-family: "Righteous", cursive;
   color: white;
   background-image: url("https://cdn.britannica.com/74/182174-050-6755AB49/balloon-sky.jpg");
+  background-size: cover;
 }
 
 .container {
