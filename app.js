@@ -38,7 +38,7 @@ export function displayWeather() {
       
       <p> ${state.main}</p>
       <p>Time: ${currentTime}</p>
-      <img src = http://openweathermap.org/img/wn/${state.icon}@2x.png>
+      <img src = https://openweathermap.org/img/wn/${state.icon}@2x.png>
       <p class="info">Humidity: ${humidity} %</p>
       <p><span id="high">H: ${data.tempMaxCelsius} °C</span><span id="low">L: ${
     data.tempMinCelsius
