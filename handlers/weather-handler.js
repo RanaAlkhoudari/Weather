@@ -3,7 +3,7 @@ import { displayWeather } from "../app.js";
 
 export async function handleWeather(city, data) {
   const weatherContainer = document.getElementById("weather");
-  const weatherUrl = `http://api.openweathermap.org/data/2.5/weather`;
+  const weatherUrl = `https://api.openweathermap.org/data/2.5/weather`;
 
   try {
     data.weatherData = await fetchData(
