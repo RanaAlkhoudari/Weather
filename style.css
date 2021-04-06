@@ -104,3 +104,10 @@ span,
     width: 300px;
   }
 }
+
+
+@media (min-width: 1450px) {
+  body {
+    background-size: cover;
+  }
+}
