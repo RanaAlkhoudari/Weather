@@ -2,6 +2,8 @@
 
 :point_right:	 [DEMO](https://ranaalkhoudari.github.io/Weather-app/)
 
+Using api
+
 The project enables the user to get information about the weather.
 
 The project fetchs the data from openweathermap api.
