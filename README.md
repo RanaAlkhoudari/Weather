@@ -2,7 +2,7 @@
 
 :point_right:	 [DEMO](https://ranaalkhoudari.github.io/Weather-app/)
 
-Using api
+USING API
 
 The project enables the user to get information about the weather.
 
